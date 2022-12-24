@@ -1,7 +1,5 @@
 const router = require("express").Router();
-let Item = require("../models/Item");
 let Category = require("../models/Category");
-let SubCategory = require("../models/SubCategory");
 
 router.route("/test").get((req,res) => {
     
@@ -10,20 +8,14 @@ router.route("/test").get((req,res) => {
 })
 
 router.route("/add").post((req,res) => {
-    const category = req.body.category;
-    const subcategory = req.body.subcategory;
     const name = req.body.name;
-    const desc = req.body.desc;
 
-    const newItem = new Item({
-        category,
-        subcategory,
-        name,
-        desc
+    const newCategory = new Category({
+        name
     })
 
-    newItem.save().then(()=>{
-        res.json("Item Added")
+    newCategory.save().then(()=>{
+        res.json("Category Added")
     }).catch((err)=>{
         console.log(err)
     })
@@ -31,8 +23,8 @@ router.route("/add").post((req,res) => {
 })
 
 router.route("/").get((req,res) => {
-    Item.find().then((Items)=>{
-        res.json(Items)
+    Category.find().then((Categories)=>{
+        res.json(Categories)
     }).catch((err)=>{
         console.log(err)
     })
@@ -42,16 +34,16 @@ router.route("/update/:id").put(async (req,res) =>{
     let userId = req.params.id;
     const {category,subcategory,name,desc} = req.body;
 
-    const updateItem = {
+    const updateCategory = {
         category,
         subcategory,
         name,
         desc
     }
 
-    const update = await Item.findByIdAndUpdate(userId, updateItem)
+    const update = await Category.findByIdAndUpdate(userId, updateCategory)
     .then(() =>{
-        res.status(200).send({status: "Item updated" });
+        res.status(200).send({status: "Category updated" });
     }).catch((err) =>{
         console.log(err);
         res.status(500).send({status: "Error while updateing", error: err.message()});
@@ -61,9 +53,9 @@ router.route("/update/:id").put(async (req,res) =>{
 router.route("/delete/:id").delete(async (req,res) =>{
     let userId = req.params.id;
 
-    await Item.findByIdAndDelete(userId)
+    await Category.findByIdAndDelete(userId)
     .then(() =>{
-        res.status(200).send({status: "Item deleted"});
+        res.status(200).send({status: "Category deleted"});
     }).catch((err) =>{
         console.log(err);
         res.status(500).send({status: "Error while deleting", error: err.message()});
@@ -72,8 +64,8 @@ router.route("/delete/:id").delete(async (req,res) =>{
 
 router.route("/get/:id").get(async (req,res) =>{
     let id = req.params.id;
-    const user = await Item.findById(id,function (err, Item){
-        return res.json( Item )
+    const user = await Category.findById(id,function (err, Category){
+        return res.json( Category )
     }).catch((err)=>{
         return res.json( err )
     })
@@ -82,8 +74,8 @@ router.route("/get/:id").get(async (req,res) =>{
 
 // router.route("/sort_by_category/:category").get(async (req,res) =>{
 //     let category = req.params.category;
-//     const sub_category = await Item.(id,function (err, Item){
-//         return res.json( Item )
+//     const sub_category = await Category.(id,function (err, Category){
+//         return res.json( Category )
 //     }).catch((err)=>{
 //         return res.json( err )
 //     })

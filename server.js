@@ -27,8 +27,12 @@ connection.once("open", () =>{
 })
 
 const itemRouter = require("./routes/Items.js");
+const categoryRouter = require("./routes/Category");
+const SubCategoryRouter = require("./routes/SubCategory");
 
 app.use("/item",itemRouter)
+app.use("/category",categoryRouter)
+app.use("/subcategory",SubCategoryRouter)
 
 app.listen(PORT, () =>{
     console.log('Server is up and running : '+PORT)
