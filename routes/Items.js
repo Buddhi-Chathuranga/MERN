@@ -29,8 +29,8 @@ router.route("/add").post((req,res) => {
 })
 
 router.route("/").get((req,res) => {
-    Lecturer.find().then((Lecturers)=>{
-        res.json(Lecturers)
+    Item.find().then((Items)=>{
+        res.json(Items)
     }).catch((err)=>{
         console.log(err)
     })
@@ -38,18 +38,18 @@ router.route("/").get((req,res) => {
 
 router.route("/update/:id").put(async (req,res) =>{
     let userId = req.params.id;
-    const {name,birthDay,qualification,phone} = req.body;
+    const {catogory,subcatogory,name,desc} = req.body;
 
-    const updateLecturer = {
+    const updateItem = {
+        catogory,
+        subcatogory,
         name,
-        birthDay,
-        qualification,
-        phone 
+        desc
     }
 
-    const update = await Lecturer.findByIdAndUpdate(userId, updateLecturer)
+    const update = await Item.findByIdAndUpdate(userId, updateItem)
     .then(() =>{
-        res.status(200).send({status: "User updated" });
+        res.status(200).send({status: "Item updated" });
     }).catch((err) =>{
         console.log(err);
         res.status(500).send({status: "Error while updateing", error: err.message()});
@@ -59,9 +59,9 @@ router.route("/update/:id").put(async (req,res) =>{
 router.route("/delete/:id").delete(async (req,res) =>{
     let userId = req.params.id;
 
-    await Lecturer.findByIdAndDelete(userId)
+    await Item.findByIdAndDelete(userId)
     .then(() =>{
-        res.status(200).send({status: "User deleted"});
+        res.status(200).send({status: "Item deleted"});
     }).catch((err) =>{
         console.log(err);
         res.status(500).send({status: "Error while deleting", error: err.message()});
@@ -70,8 +70,8 @@ router.route("/delete/:id").delete(async (req,res) =>{
 
 router.route("/get/:id").get(async (req,res) =>{
     let id = req.params.id;
-    const user = await Lecturer.findById(id,function (err, Lecturer){
-        return res.json( Lecturer )
+    const user = await Item.findById(id,function (err, Item){
+        return res.json( Item )
     }).catch((err)=>{
         return res.json( err )
     })
