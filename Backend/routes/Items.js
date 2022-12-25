@@ -80,14 +80,21 @@ router.route("/get/:id").get(async (req,res) =>{
 })
 
 
-// router.route("/sort_by_category/:category").get(async (req,res) =>{
-//     let category = req.params.category;
-//     const sub_category = await Item.(id,function (err, Item){
-//         return res.json( Item )
-//     }).catch((err)=>{
-//         return res.json( err )
-//     })
-// })
+router.route("/sort_by_category").get(async (req,res) =>{
+    const {category,subcategory} = req.body;
+    var arr = [];
+    const CategoryID = Item.find({category:category,subcategory:subcategory}).then((Items)=>{
+        Items.forEach(function(table) {
+            var tableName = table.id;
+            arr.push(tableName);
+        })
+        return res.json( arr )
+    }).catch((err)=>{
+        console.log(err)
+    })
+
+    
+})
 
 
 module.exports = router;
